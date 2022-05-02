@@ -12,13 +12,11 @@ namespace DogScepterLib.Core.Models
     public class GMFunctionEntry : IGMSerializable
     {
         public GMString Name;
-        public int StringIndex; // Index of the string in the STRG chunk, appears to be unused(?)
         public int Occurrences;
 
         public void Serialize(GMDataWriter writer)
         {
             writer.WritePointerString(Name);
-            writer.Write(Occurrences);
 
             List<int> references;
             if (writer.FunctionReferences.TryGetValue(this, out references))
@@ -26,6 +24,7 @@ namespace DogScepterLib.Core.Models
             else
                 Occurrences = 0;
 
+            writer.Write(Occurrences);
             if (Occurrences > 0)
             {
                 if (writer.VersionInfo.IsVersionAtLeast(2, 3))
